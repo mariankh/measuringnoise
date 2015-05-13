@@ -1,0 +1,58 @@
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import junit.framework.Assert;
+
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
+
+public class LatenNoiseMeasure {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 * @throws FailingHttpStatusCodeException 
+	 */
+	
+	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		// TODO Auto-generated method stub
+	
+		final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);         
+        webClient.setJavaScriptEnabled(true);
+        webClient.getCookieManager().setCookiesEnabled(true);
+
+
+     try{   final HtmlPage page1 =  webClient.getPage("http://www.ccstechnologies.org/login.aspx/");
+        final HtmlForm form = page1.getFormByName("form1");         
+        final HtmlSubmitInput button =  form.getInputByName("BtnLogin");
+        final HtmlTextInput textField =  form.getInputByName("Username");
+        final HtmlPasswordInput pwd =  form.getInputByName("password");        
+        textField.setValueAttribute("username");
+        pwd.setValueAttribute("password");      
+System.out.println(page1.asText());
+        final HtmlPage page2 =  (HtmlPage) form.getInputByValue("Login").click();
+
+        String htmlBody = page2.getWebResponse().getContentAsString(); 
+        System.out.println(page2.asText());
+       System.out.println("Base Uri 1 : "+page1);
+      System.out.println("Base Uri 2 : "+page2);
+
+        webClient.closeAllWindows();}catch (Exception e) {
+            // TODO: handle exception
+        }
+		    
+	
+	
+
+	    
+
+	
+	
+
+}

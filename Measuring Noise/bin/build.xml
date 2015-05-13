@@ -1,0 +1,95 @@
+<project name="Jazzy - jEdit Plugin." default="jedit-plugin" basedir=".">
+
+  <!-- set global properties for this build (directory names) -->
+  <property name="src" value="src"/>
+  <property name="build" value="bin"/>
+  <property name="dist"  value="dist"/>
+  <property name="dict" value="dict"/>
+  <property name="javadoc"  value="javadoc"/>
+  <property name="jedit-config" value="${src}/com/swabunga/spell/jedit/config"/>
+  <property name="target" value="1.3"/>
+  <property name="package" value="com.swabunga.spell.event"/>
+  <property name="verbose" value="false"/>
+	<property name="jsdk1.3"  value=""/>
+  <property name="jedit" value=""/>
+  <property name="test-class" value="DefaultWordFinder"/>
+ 
+  <!-- Build classpath -->
+  <path id="classpath">
+    <pathelement path="${classpath}"/>
+    <!-- external libs needed for build
+    <fileset dir="lib">
+      <include name="**/*.jar"/>
+    </fileset>
+    -->
+  </path>
+  
+  <path id="bootclass.path">
+    <fileset dir="${jsdk1.3}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <selector id="jedit-src">
+     <or>
+        <filename name="**/jedit/*.java"/>
+        <filename name="**/engine/*.java"/>
+        <filename name="**/event/*.java"/>
+        <filename name="**/swing/JSpellDialog.java"/>
+        <filename name="**/swing/JSpellForm.java"/>
+      </or>
+  </selector>
+  
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${javadoc}"/>
+  </target>
+
+  <target name="cross-compile" depends="init">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac deprecation="true" verbose="${verbose}" srcdir="${src}" destdir="${build}" target="${target}"
+           bootclasspathref="bootclass.path">
+      <selector refid="jedit-src"/>
+      <classpath refid="classpath"/>
+   </javac>
+  </target>
+
+  <target name="javadoc" depends="init">
+    <!-- Compile the javadoc from ${src} into ${javadoc} -->
+    <javadoc sourcepath="${src}" destdir="${javadoc}" packagenames="com.swabunga.spell.*">
+      <fileset>
+        <selector refid="jedit-src"/>
+      </fileset>
+      <classpath refid="classpath"/>
+    </javadoc>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${javadoc}"/>
+  </target>
+ 
+  <target name="jedit-pack" depends="init">
+   <copy todir="${build}">
+      <fileset dir="${jedit-config}"/>
+      <fileset dir="${dict}" includes="english.0"/>
+      <fileset dir="${src}" >
+        <include name="**/*.properties"/>
+        <exclude name="**/examples/*"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="jedit-plugin" depends="cross-compile,jedit-pack">
+  	<jar jarfile="../JazzyPlugin.jar" basedir="${build}">
+    </jar>
+  </target>
+  
+</project>
+

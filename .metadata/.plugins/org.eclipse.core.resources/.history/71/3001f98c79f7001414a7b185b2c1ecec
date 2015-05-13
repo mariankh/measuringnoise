@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+
+public class calculateSpellingMistakes {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+
+		JazzySpellChecker jazzy = new JazzySpellChecker();
+		int all_guessed=0;
+		BufferedReader br = new BufferedReader(new FileReader("results.txt"));
+		String text;
+		int count=0;
+		ArrayList<String>  all_mistakes = new ArrayList<String> ();
+		while ((text = br.readLine()) != null) {
+			
+			    	ArrayList<String>  mistakes = jazzy.getMisspelledWords(text);
+			    	all_mistakes.addAll(mistakes);
+		}
+		
+		System.out.println(all_mistakes);
+		
+		
+	}
+}

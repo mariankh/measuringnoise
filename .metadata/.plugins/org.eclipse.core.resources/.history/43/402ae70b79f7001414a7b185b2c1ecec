@@ -1,0 +1,24 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+
+
+public class calculateSpellingMistakes {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		JazzySpellChecker jazzy = new JazzySpellChecker();
+		int all_guessed=0;
+		BufferedReader br = new BufferedReader(new FileReader("results.txt"));
+		String text;
+		
+		while ((text = br.readLine()) != null) {
+			
+			    	ArrayList<String>  mistakes = jazzy.getMisspelledWords(text);
+		}
+	}
+}
